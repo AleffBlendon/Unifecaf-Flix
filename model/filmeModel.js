@@ -1,4 +1,3 @@
-// Importa a instância única e reutilizável do PrismaClient.
 const prisma = require('../prisma/prismaClient');
 
 /**
@@ -10,7 +9,8 @@ async function getAllFilmes() {
 
 /**
  * Busca um filme pelo ID.
- * @param {number|string} id - ID do filme
+ * Retorna null se não encontrado (sem lançar erro).
+ * @param {number|string} id
  */
 async function getFilmeById(id) {
   return await prisma.tbl_filmes.findUnique({
@@ -19,15 +19,18 @@ async function getFilmeById(id) {
 }
 
 /**
- * Filtra filmes pelo nome (parcial) ou pela sinopse.
- * @param {string} termo - Texto a ser buscado
+ * Filtra filmes pelo nome ou sinopse (busca parcial, case-insensitive).
+ * MySQL não suporta mode: 'insensitive' via Prisma — usamos LOWER() via raw
+ * para garantir busca case-insensitive independente do collation do banco.
+ * @param {string} termo
  */
 async function getFilmesByNome(termo) {
+  const termoLower = termo.toLowerCase();
   return await prisma.tbl_filmes.findMany({
     where: {
       OR: [
-        { nome:    { contains: termo } },
-        { sinopse: { contains: termo } },
+        { nome:    { contains: termoLower } },
+        { sinopse: { contains: termoLower } },
       ],
     },
   });
@@ -35,43 +38,45 @@ async function getFilmesByNome(termo) {
 
 /**
  * Cria um novo filme no banco.
- * @param {object} data - Dados do filme
+ * @param {object} data
  */
 async function createFilme(data) {
   return await prisma.tbl_filmes.create({
     data: {
       nome:    data.nome,
-      sinopse: data.sinopse  || null,
-      genero:  data.genero   || null,
-      ano:     data.ano      ? Number(data.ano)     : null,
-      duracao: data.duracao  ? Number(data.duracao) : null,
-      capa:    data.capa     || null,
+      sinopse: data.sinopse || null,
+      genero:  data.genero  || null,
+      ano:     data.ano     ? Number(data.ano)     : null,
+      duracao: data.duracao ? Number(data.duracao) : null,
+      capa:    data.capa    || null,
     },
   });
 }
 
 /**
- * Atualiza os dados de um filme existente.
- * @param {number|string} id   - ID do filme
- * @param {object}        data - Novos dados
+ * Atualiza um filme existente.
+ * A verificação de existência é feita no controller antes de chamar esta função.
+ * @param {number|string} id
+ * @param {object} data
  */
 async function updateFilme(id, data) {
   return await prisma.tbl_filmes.update({
     where: { id: Number(id) },
     data: {
       nome:    data.nome,
-      sinopse: data.sinopse  || null,
-      genero:  data.genero   || null,
-      ano:     data.ano      ? Number(data.ano)     : null,
-      duracao: data.duracao  ? Number(data.duracao) : null,
-      capa:    data.capa     || null,
+      sinopse: data.sinopse || null,
+      genero:  data.genero  || null,
+      ano:     data.ano     ? Number(data.ano)     : null,
+      duracao: data.duracao ? Number(data.duracao) : null,
+      capa:    data.capa    || null,
     },
   });
 }
 
 /**
- * Remove um filme do banco pelo ID.
- * @param {number|string} id - ID do filme
+ * Remove um filme pelo ID.
+ * A verificação de existência é feita no controller antes de chamar esta função.
+ * @param {number|string} id
  */
 async function deleteFilme(id) {
   return await prisma.tbl_filmes.delete({

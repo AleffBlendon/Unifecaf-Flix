@@ -1,8 +1,7 @@
 require('dotenv').config(); // Carrega o .env antes de qualquer outro módulo
 
-const express    = require('express');
-const cors       = require('cors');
-const bodyParser = require('body-parser');
+const express = require('express');
+const cors    = require('cors');
 
 const filmeController = require('./controller/filmeController');
 
@@ -11,15 +10,15 @@ const PORT = 3000;
 
 // ─── Middlewares ───────────────────────────────────────────────────────────────
 app.use(cors());
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json());                        // substitui bodyParser.json()
+app.use(express.urlencoded({ extended: true })); // substitui bodyParser.urlencoded()
 
 // ─── Prefixo base da API ───────────────────────────────────────────────────────
 const BASE = '/v1/controle-filmes';
 
 // ─── Rotas de Filmes ───────────────────────────────────────────────────────────
 
-// Filtro por nome/sinopse 
+// Filtro por nome/sinopse — deve vir ANTES de /:id para não colidir
 app.get(`${BASE}/filtro/filme`,  filmeController.filtrarFilmes);
 
 // CRUD completo

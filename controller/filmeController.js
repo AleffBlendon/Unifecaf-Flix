@@ -2,12 +2,16 @@ const filmeModel = require('../model/filmeModel');
 
 // ─────────────────────────────────────────────────────────────────────────────
 // GET /v1/controle-filmes/filme
-// Lista todos os filmes cadastrados
+// Lista todos os filmes — resposta padronizada com quantidade + dados
 // ─────────────────────────────────────────────────────────────────────────────
 async function listarFilmes(req, res) {
   try {
     const filmes = await filmeModel.getAllFilmes();
-    return res.status(200).json(filmes);
+
+    return res.status(200).json({
+      quantidade: filmes.length,
+      dados: filmes,
+    });
   } catch (error) {
     console.error('Erro ao listar filmes:', error);
     return res.status(500).json({ erro: 'Erro interno ao listar filmes.' });
@@ -16,13 +20,12 @@ async function listarFilmes(req, res) {
 
 // ─────────────────────────────────────────────────────────────────────────────
 // GET /v1/controle-filmes/filme/:id
-// Busca um filme pelo ID
+// Busca um filme pelo ID — resposta padronizada com dados
 // ─────────────────────────────────────────────────────────────────────────────
 async function buscarFilme(req, res) {
   try {
     const { id } = req.params;
 
-    // Valida se o ID é um número válido
     if (isNaN(Number(id))) {
       return res.status(400).json({ erro: 'ID inválido. Informe um número inteiro.' });
     }
@@ -33,7 +36,10 @@ async function buscarFilme(req, res) {
       return res.status(404).json({ erro: `Filme com ID ${id} não encontrado.` });
     }
 
-    return res.status(200).json(filme);
+    return res.status(200).json({
+      quantidade: 1,
+      dados: filme,
+    });
   } catch (error) {
     console.error('Erro ao buscar filme:', error);
     return res.status(500).json({ erro: 'Erro interno ao buscar filme.' });
@@ -42,13 +48,12 @@ async function buscarFilme(req, res) {
 
 // ─────────────────────────────────────────────────────────────────────────────
 // GET /v1/controle-filmes/filtro/filme?nome=xxx
-// Filtra filmes pelo nome (parcial) ou pela sinopse
+// Filtra filmes pelo nome ou sinopse (case-insensitive)
 // ─────────────────────────────────────────────────────────────────────────────
 async function filtrarFilmes(req, res) {
   try {
     const { nome } = req.query;
 
-    // O parâmetro "nome" é obrigatório para o filtro
     if (!nome || nome.trim() === '') {
       return res.status(400).json({
         erro: 'Informe o parâmetro de busca. Ex: ?nome=matrix',
@@ -63,7 +68,10 @@ async function filtrarFilmes(req, res) {
       });
     }
 
-    return res.status(200).json(filmes);
+    return res.status(200).json({
+      quantidade: filmes.length,
+      dados: filmes,
+    });
   } catch (error) {
     console.error('Erro ao filtrar filmes:', error);
     return res.status(500).json({ erro: 'Erro interno ao filtrar filmes.' });
@@ -83,7 +91,11 @@ async function criarFilme(req, res) {
     }
 
     const novoFilme = await filmeModel.createFilme({ nome, sinopse, genero, ano, duracao, capa });
-    return res.status(201).json(novoFilme);
+
+    return res.status(201).json({
+      mensagem: 'Filme criado com sucesso.',
+      dados: novoFilme,
+    });
   } catch (error) {
     console.error('Erro ao criar filme:', error);
     return res.status(500).json({ erro: 'Erro interno ao criar filme.' });
@@ -92,7 +104,7 @@ async function criarFilme(req, res) {
 
 // ─────────────────────────────────────────────────────────────────────────────
 // PUT /v1/controle-filmes/filme/:id
-// Atualiza os dados de um filme existente
+// Atualiza um filme — verifica existência antes de chamar o model
 // ─────────────────────────────────────────────────────────────────────────────
 async function atualizarFilme(req, res) {
   try {
@@ -103,18 +115,22 @@ async function atualizarFilme(req, res) {
       return res.status(400).json({ erro: 'ID inválido. Informe um número inteiro.' });
     }
 
-    // Verifica se o filme existe antes de atualizar
+    if (!nome) {
+      return res.status(400).json({ erro: 'O campo "nome" é obrigatório.' });
+    }
+
+    // Verifica existência antes de tentar atualizar — evita erro 500 do Prisma
     const filmeExistente = await filmeModel.getFilmeById(id);
     if (!filmeExistente) {
       return res.status(404).json({ erro: `Filme com ID ${id} não encontrado.` });
     }
 
-    if (!nome) {
-      return res.status(400).json({ erro: 'O campo "nome" é obrigatório.' });
-    }
-
     const filmeAtualizado = await filmeModel.updateFilme(id, { nome, sinopse, genero, ano, duracao, capa });
-    return res.status(200).json(filmeAtualizado);
+
+    return res.status(200).json({
+      mensagem: 'Filme atualizado com sucesso.',
+      dados: filmeAtualizado,
+    });
   } catch (error) {
     console.error('Erro ao atualizar filme:', error);
     return res.status(500).json({ erro: 'Erro interno ao atualizar filme.' });
@@ -123,7 +139,7 @@ async function atualizarFilme(req, res) {
 
 // ─────────────────────────────────────────────────────────────────────────────
 // DELETE /v1/controle-filmes/filme/:id
-// Remove um filme pelo ID
+// Remove um filme — verifica existência antes de chamar o model
 // ─────────────────────────────────────────────────────────────────────────────
 async function deletarFilme(req, res) {
   try {
@@ -133,14 +149,17 @@ async function deletarFilme(req, res) {
       return res.status(400).json({ erro: 'ID inválido. Informe um número inteiro.' });
     }
 
-    // Verifica se o filme existe antes de deletar
+    // Verifica existência antes de tentar deletar — evita erro 500 do Prisma
     const filmeExistente = await filmeModel.getFilmeById(id);
     if (!filmeExistente) {
       return res.status(404).json({ erro: `Filme com ID ${id} não encontrado.` });
     }
 
     await filmeModel.deleteFilme(id);
-    return res.status(200).json({ mensagem: `Filme com ID ${id} deletado com sucesso.` });
+
+    return res.status(200).json({
+      mensagem: `Filme com ID ${id} deletado com sucesso.`,
+    });
   } catch (error) {
     console.error('Erro ao deletar filme:', error);
     return res.status(500).json({ erro: 'Erro interno ao deletar filme.' });

@@ -140,7 +140,8 @@ async function carregarFilmes() {
 
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
-    const filmes = await res.json();
+    const json = await res.json();
+    const filmes = json.dados; // resposta padronizada: { quantidade, dados }
 
     if (!filmes.length) {
       emptyMsg.textContent = 'Nenhum filme cadastrado ainda.';
@@ -184,7 +185,8 @@ async function buscarFilmes(termo) {
 
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
-    const filmes = await res.json();
+    const json = await res.json();
+    const filmes = json.dados; // resposta padronizada: { quantidade, dados }
 
     sectionCount.textContent = `${filmes.length} resultado${filmes.length !== 1 ? 's' : ''}`;
     renderizarFilmes(filmes);
@@ -206,7 +208,8 @@ async function abrirModal(id) {
 
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
-    const filme = await res.json();
+    const json = await res.json();
+    const filme = json.dados; // resposta padronizada: { quantidade, dados }
     preencherModal(filme);
     modalOverlay.classList.add('active');
     document.body.style.overflow = 'hidden';
