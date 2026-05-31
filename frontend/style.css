@@ -1,3 +1,16 @@
+/**********************************************************************************************************************************
+ * Objetivo: Estilizar a interface da aplicação com tema inspirado na Netflix.                                                    *
+ * Funcionalidades:                                                                                                               *
+ * - Layout em grid de filmes                                                                                                     *
+ * - Tema dark (escuro)                                                                                                           *
+ * - Efeitos de hover nos cards                                                                                                   *
+ * - Uso de cores principais (roxo, verde e azul)                                                                                 *
+ * Tecnologias: CSS3                                                                                                              *
+ * Autor: Aleff Blendon Costa                                                                                                     *
+ * Data: 2026                                                                                                                     *
+ * Versão: 1.0                                                                                                                    *
+ *********************************************************************************************************************************/
+
 /* ═══════════════════════════════════════════════════════════════════════════
    RESET & VARIÁVEIS
 ═══════════════════════════════════════════════════════════════════════════ */

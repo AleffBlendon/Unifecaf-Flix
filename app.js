@@ -1,3 +1,16 @@
+/**********************************************************************************************************************************
+ * Objetivo: Configurar o servidor da aplicação e gerenciar as rotas da API de controle de filmes.                                *
+ * Funcionalidades:                                                                                                               *
+ * - Inicialização do servidor com Express                                                                                        *
+ * - Configuração de middlewares (CORS e JSON)                                                                                    *
+ * - Definição das rotas da API REST                                                                                              *
+ * - Integração com o controller de filmes                                                                                        *
+ * Tecnologias: Node.js, Express                                                                                                  *
+ * Autor: Aleff Blendon Costa                                                                                                     *
+ * Data: 2026                                                                                                                     *
+ * Versão: 1.0                                                                                                                    *
+ *********************************************************************************************************************************/
+
 require('dotenv').config(); // Carrega o .env antes de qualquer outro módulo
 
 const express = require('express');

@@ -1,3 +1,19 @@
+/**********************************************************************************************************************************
+ * Objetivo: Gerenciar as requisições HTTP da API de filmes.                                                                      *
+ * Funcionalidades:                                                                                                               *
+ * - Listar todos os filmes                                                                                                       *
+ * - Buscar filme por ID                                                                                                          *
+ * - Filtrar filmes por nome ou sinopse                                                                                           *
+ * - Criar novos filmes                                                                                                           *
+ * - Atualizar dados de filmes                                                                                                    *
+ * - Remover filmes                                                                                                               *
+ * Tecnologias: Node.js, Express                                                                                                  *
+ * Integração: FilmeModel (acesso ao banco de dados)                                                                              *
+ * Autor: Aleff Blendon Costa                                                                                                     *
+ * Data: 2026                                                                                                                     *
+ * Versão: 1.0                                                                                                                    *
+ *********************************************************************************************************************************/
+
 const filmeModel = require('../model/filmeModel');
 
 // ─────────────────────────────────────────────────────────────────────────────

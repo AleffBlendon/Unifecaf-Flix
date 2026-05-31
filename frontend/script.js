@@ -1,3 +1,17 @@
+/**********************************************************************************************************************************
+ * Objetivo: Consumir a API de filmes e manipular o DOM para exibição dinâmica dos dados.                                         *
+ * Funcionalidades:                                                                                                               *
+ * - Requisições GET para listar filmes                                                                                           *
+ * - Renderização dos filmes na tela                                                                                              *
+ * - Consumo da API utilizando fetch                                                                                              *
+ * - Interação com elementos HTML                                                                                                 *
+ * Tecnologias: JavaScript (ES6+)                                                                                                 *
+ * API utilizada: http://localhost:3000/v1/controle-filmes                                                                        *
+ * Autor: Aleff Blendon Costa                                                                                                     *
+ * Data: 2026                                                                                                                     *
+ * Versão: 1.0                                                                                                                    *
+ *********************************************************************************************************************************/
+
 /* ═══════════════════════════════════════════════════════════════════════════
    CONFIGURAÇÃO
 ═══════════════════════════════════════════════════════════════════════════ */

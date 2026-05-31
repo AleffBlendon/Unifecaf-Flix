@@ -1,3 +1,19 @@
+/**********************************************************************************************************************************
+ * Objetivo: Realizar a comunicação com o banco de dados utilizando Prisma ORM.                                                   *
+ * Funcionalidades:                                                                                                               *
+ * - Inserção de filmes no banco                                                                                                  *
+ * - Consulta de todos os filmes                                                                                                  *
+ * - Busca de filme por ID                                                                                                        *
+ * - Filtro por nome ou sinopse                                                                                                   *
+ * - Atualização de registros                                                                                                     *
+ * - Exclusão de filmes                                                                                                           *
+ * Tecnologias: Node.js, Prisma ORM, MySQL                                                                                        *
+ * Banco de Dados: db_unifecaf_flix                                                                                               *
+ * Autor: Aleff Blendon Costa                                                                                                     *
+ * Data: 2026                                                                                                                     *
+ * Versão: 1.0                                                                                                                    *
+ *********************************************************************************************************************************/
+
 const prisma = require('../prisma/prismaClient');
 
 /**
