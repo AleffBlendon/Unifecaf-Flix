@@ -19,9 +19,9 @@ async function getFilmeById(id) {
 }
 
 /**
- * Filtra filmes pelo nome ou sinopse (busca parcial, case-insensitive).
- * MySQL não suporta mode: 'insensitive' via Prisma — usamos LOWER() via raw
- * para garantir busca case-insensitive independente do collation do banco.
+ * Filtra filmes pelo nome, sinopse ou gênero (busca parcial, case-insensitive).
+ * Converte o termo para lowercase para garantir case-insensitive
+ * independente do collation configurado no banco MySQL.
  * @param {string} termo
  */
 async function getFilmesByNome(termo) {
@@ -31,6 +31,7 @@ async function getFilmesByNome(termo) {
       OR: [
         { nome:    { contains: termoLower } },
         { sinopse: { contains: termoLower } },
+        { genero:  { contains: termoLower } },
       ],
     },
   });
