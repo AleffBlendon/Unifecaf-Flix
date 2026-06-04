@@ -23,8 +23,8 @@ const PORT = 3000;
 
 // ─── Middlewares ───────────────────────────────────────────────────────────────
 app.use(cors());
-app.use(express.json());                        // substitui bodyParser.json()
-app.use(express.urlencoded({ extended: true })); // substitui bodyParser.urlencoded()
+app.use(express.json());                        
+app.use(express.urlencoded({ extended: true })); 
 
 // ─── Prefixo base da API ───────────────────────────────────────────────────────
 const BASE = '/v1/controle-filmes';
